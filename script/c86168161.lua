@@ -65,11 +65,11 @@ end
 function s.lizfilter(e,c)
 	return not (c:IsOriginalAttribute(ATTRIBUTE_LIGHT) and c:IsOriginalType(TYPE_SYNCHRO|TYPE_XYZ))
 end
-function s.synctg(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.synchtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsSynchroSummonable,tp,LOCATION_EXTRA,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
-function s.syncop(e,tp,eg,ep,ev,re,r,rp)
+function s.synchop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local synchro=Duel.SelectMatchingCard(tp,Card.IsSynchroSummonable,tp,LOCATION_EXTRA,0,1,1,nil):GetFirst()
 	if synchro then
