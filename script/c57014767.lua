@@ -81,7 +81,7 @@ function s.copyop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.chfilter(c,e)
-	return c:IsFaceup() and c:IsType(TYPE_SYNCHRO) and c:IsCanBeEffectTarget(e)
+	return c:IsFaceup() and c:IsCanBeEffectTarget(e)
 end
 function s.chtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g=Duel.GetMatchingGroup(s.chfilter,tp,LOCATION_MZONE,LOCATION_MZONE,e:GetHandler(),e)
