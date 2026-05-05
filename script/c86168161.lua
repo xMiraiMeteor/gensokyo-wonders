@@ -25,8 +25,8 @@ function s.initial_effect(c)
 	e3:SetHintTiming(0,TIMING_STANDBY_PHASE|TIMING_MAIN_END|TIMINGS_CHECK_MONSTER_E)
 	e3:SetCountLimit(1,{id,1})
 	e3:SetCondition(function(e,tp) return Duel.IsTurnPlayer(1-tp) end)
-	e3:SetTarget(s.synchtg)
-	e3:SetOperation(s.synchop)
+	e3:SetTarget(s.synctg)
+	e3:SetOperation(s.syncop)
 	c:RegisterEffect(e3)
 end
 s.listed_series={0x382,0x31e}
