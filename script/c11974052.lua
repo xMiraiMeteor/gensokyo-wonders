@@ -69,7 +69,7 @@ function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return re:IsActiveType(TYPE_MONSTER) and rc:IsAttribute(ATTRIBUTE_LIGHT|ATTRIBUTE_EARTH|ATTRIBUTE_WIND)
 end
 function s.thfilter(c,tp)
-	return (c:IsSetCard(0x382) or c:IsSetCard(0x31e)) and c:IsMonster() and not c:IsCode(id) and c:IsAbleToHand()
+	return c:IsSetCard({0x382,0x31e}) and c:IsMonster() and not c:IsCode(id) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,tp) end
