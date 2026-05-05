@@ -31,7 +31,7 @@ function s.initial_effect(c)
 end
 s.listed_series={0x382,0x31e}
 function s.thfilter(c,tp)
-	return c:IsSetCard(0x382,0x31e) and c:IsSpellTrap() and c:IsAbleToHand()
+	return c:IsSetCard({0x382,0x31e}) and c:IsSpellTrap() and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,tp) end
