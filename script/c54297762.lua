@@ -24,6 +24,7 @@ function s.initial_effect(c)
 	e2:SetCost(Cost.SelfBanish)
 	e2:SetTarget(s.sptg)
 	e2:SetOperation(s.spop)
+	c:RegisterEffect(e2)
 end
 s.listed_series={0x382,0x31e}
 function s.filter(c,e,tp)
