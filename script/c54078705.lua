@@ -3,27 +3,29 @@ local s,id=GetID()
 function s.initial_effect(c)
     c:EnableReviveLimit()
 	Synchro.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_SPELLCASTER),1,1,Synchro.NonTuner(nil),1,99)
-    --Opponent's monsters DEF down
+	--Neither player can activate the effects of monsters with 1000 or less DEF
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_UPDATE_DEFENSE)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e1:SetCode(EFFECT_CANNOT_ACTIVATE)
 	e1:SetRange(LOCATION_MZONE)
-	e1:SetTargetRange(0,LOCATION_MZONE)
-	e1:SetValue(s.defval)
+	e1:SetTargetRange(1,1)
+	e1:SetCondition(function(e) return e:GetHandler():IsSynchroSummoned() end)
+	e1:SetValue(function(e,re,tp) return re:IsMonsterEffect() and re:GetHandler():IsDefenseBelow(1000) end)
 	c:RegisterEffect(e1)
-	--Neither player can activate the effects of monsters with 1000 or less DEF
+	--Monsters your opponent currently controls lose DEF equal to their original ATK
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e2:SetCode(EFFECT_CANNOT_ACTIVATE)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetTargetRange(1,1)
+	e2:SetDescription(aux.Stringid(id,0))
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetCondition(function(e) return e:GetHandler():IsSynchroSummoned() end)
-	e2:SetValue(function(e,re,tp) return re:IsMonsterEffect() and re:GetHandler():IsDefenseBelow(1000) end)
+	e2:SetTarget(s.deftg)
+	e2:SetOperation(s.defop)
 	c:RegisterEffect(e2)
 	--Special Summon up to 2
 	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(id,0))
+	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
@@ -38,6 +40,21 @@ s.listed_series={0x382,0x31e}
 function s.defval(e,c)
 	local val=math.max(c:GetBaseAttack(),0)
 	return val*-1
+end
+function s.deftg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) end
+end
+function s.defop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
+	local tc=g:GetFirst()
+	for tc in aux.Next(g) do
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_UPDATE_DEFENSE)
+		e1:SetValue(s.defval)
+		e1:SetReset(RESETS_STANDARD)
+		tc:RegisterEffect(e1)
+	end
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
