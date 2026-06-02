@@ -38,7 +38,6 @@ function s.initial_effect(c)
 	e3:SetTarget(s.desreptg)
 	c:RegisterEffect(e3)
 end
-s.listed_series={0x382}
 function s.costcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsSynchroSummoned()
